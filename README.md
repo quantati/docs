@@ -9,6 +9,7 @@ This repository contains the documentation for [Quantati](https://quantati.com)�
 - [Resources](#3-resources)
   - [Product](#31-product)
   - [Category](#32-category)
+  - [Article](#33-article)
 - [SDKs](SDK.md)
 
 ## 1. Overview
@@ -166,6 +167,70 @@ Where response data contains an array of products the following fields:
 | productId     | string       | Unique product ID determined by Quantati. Can be between upc, sku, mpn, or extracted from product URL |
 | primaryImage  | object       | Primary image details: including url, title, width, height  |
 | availability  | bool         | (Beta) Item's availability, either true or false.  |
+
+Possible errors:
+
+| Error code           | Description                                                                                                          |
+| ---------------------|----------------------------------------------------------------------------------------------------------------------|
+| 400 Bad Request      | Required fields were invalid, not specified.                                                                         |
+| 401 Unauthorized     | The access token is invalid or has been revoked.                                                                     |
+
+### 3.3. Article
+
+#### Overview
+The Article Page API extracts clean article content, authors, published dates, excerpts, lead images.
+
+To use the Article API, perform a HTTP GET request on the following endpoint:
+
+```
+GET https://api.quantati.com/v1/article
+```
+
+Example request:
+
+```
+GET /v1/article?token=Ab6bWWFHbCcyIgZ66Vpf&url=https%3A%2F%2Fblog.com%2Farticle%2F0691170819 HTTP/1.1
+Host: api.quantati.com
+Content-Type: application/json
+Accept: application/json
+Accept-Charset: utf-8
+```
+
+With the following fields:
+
+| Parameter       | Type         | Required?  | Description                                     |
+| -------------   |--------------|------------|-------------------------------------------------|
+| token           | string       | required   | Developer token |
+| url             | string       | required   | Web page URL of the article to process (URL encoded) |                                   |
+
+The Article API returns data in JSON format. Example response:
+
+```
+HTTP/1.1 201 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "title": "Kabbage acquires Radius Intelligence, the marketing tech firm with a database of 20M small businesses – TechCrunch",
+  "author": null,
+  "published": "2019-09-02T21:00:00.000Z",
+  "primaryImage": "https://techcrunch.com/wp-content/uploads/2019/07/GettyImages-506181336.jpg?w=714",
+  "html": "https://techcrunch.com/2019/09/03/kabbage-acquires-radius-intelligence/",
+  "summary": "Data is the new oil, as the saying goes, and today Kabbage — a fintech startup backed by SoftBank that has built a business around lending up to $250,000 to small and medium enterprises, using AI&hellip;",
+  "totalWords": 767
+}
+```
+
+Where response data contains an array of products the following fields:
+
+| Field         | Type         | Description                                     |
+| --------------|--------------|-------------------------------------------------|
+| title         | string       | Title of the product.                                 |
+| author        | string       | Offer or actual/final price of the product.                 |
+| published     | string       | Published date. |
+| primaryImage  | string       | Primary image details url, title, width, height  |
+| html          | string       | HTML content.  |
+| summary       | string       | Article excerpt.  |
+| totalWords    | integer      | Total number of words.  |
 
 Possible errors:
 
